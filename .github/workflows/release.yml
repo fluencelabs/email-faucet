@@ -75,8 +75,8 @@ jobs:
           context: .
           push: true
           tags: |
-            fluencelabs/email-faucet:latest
-            fluencelabs/email-faucet:${{ needs.release-please.outputs.version }}
+            fluencelabs/faucet:latest
+            fluencelabs/faucet:${{ needs.release-please.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
