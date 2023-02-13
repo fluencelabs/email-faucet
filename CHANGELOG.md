@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.1...faucet-v0.1.2) (2023-02-13)
+
+
+### Bug Fixes
+
+* Use nextjs server ([62cbba9](https://github.com/fluencelabs/email-faucet/commit/62cbba90329dab55fcabc4c51e7d4af76ac32476))
+
 ## 0.1.1 (2023-02-13)
 
 
