@@ -1,7 +1,10 @@
 import { Level } from "level";
+import path from "path";
 
 //TODO: singleton pattern
-const db = new Level<string, number>("./users.db");
+const db = new Level<string, number>(
+  path.join(process.env.FAUCET_DATA_DIR!, "users.db")
+);
 
 async function setLastTimestampToUser(email: string, timestamp: number) {
   await db.put(email, timestamp);
