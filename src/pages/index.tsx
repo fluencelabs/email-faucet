@@ -53,7 +53,7 @@ export default function Home() {
         type: "ERC20",
         options: {
           address: data.tokenAddress,
-          symbol: "FakeUSD",
+          symbol: "tUSD",
           decimals: 18,
         },
       },
@@ -107,7 +107,7 @@ export default function Home() {
                   }
                   onClick={() => sendGetTokenRq()}
                 >
-                  Get $FakeUSD
+                  Get $tUSD
                 </Button>
 
                 <Button
