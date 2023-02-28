@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.2...faucet-v0.1.3) (2023-02-23)
+
+
+### Bug Fixes
+
+* token symbol ([#4](https://github.com/fluencelabs/email-faucet/issues/4)) ([e757d11](https://github.com/fluencelabs/email-faucet/commit/e757d11a0596f5f74b7c9a7ff035ff06e9324438))
+
 ## [0.1.2](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.1...faucet-v0.1.2) (2023-02-13)
 
 

@@ -100,7 +100,6 @@ export default function Home() {
                 ) : (
                   <></>
                 )}
-
                 {txHash ? (
                   <Text fontSize="md">Transaction hash: {txHash}</Text>
                 ) : (
