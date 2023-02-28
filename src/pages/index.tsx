@@ -6,6 +6,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Countdown from "react-countdown";
+import Head from "next/head";
 
 export default function Home() {
   const { user } = useUser();
@@ -61,75 +62,83 @@ export default function Home() {
   };
 
   return (
-    <Box textAlign="center" fontSize="xl">
-      <Center h="100vh">
-        <VStack spacing={8}>
-          <Heading as="h1" size="2xl">
-            Fluence faucet
-          </Heading>
+    <>
+      <Head>
+        <title>Fluence Testnet Faucet</title>
+      </Head>
+      <Box textAlign="center" fontSize="xl">
+        <Center h="100vh">
+          <VStack spacing={8}>
+            <Heading as="h1" size="2xl">
+              Fluence Testnet Faucet
+            </Heading>
 
-          {!user ? (
-            <Button
-              size={"lg"}
-              colorScheme="blue"
-              onClick={() => window.open("/api/auth/login", "_self")}
-            >
-              Login
-            </Button>
-          ) : (
-            <>
-              <Input
-                placeholder="address"
-                width="500px"
-                isInvalid={address.length > 0 && !isValidAddress}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-              {timeout > Date.now() ? (
-                <>
-                  <Text>You can receive tokens again after: </Text>
-                  <Countdown onComplete={() => setTimeout(0)} date={timeout} />
-                </>
-              ) : (
-                <></>
-              )}
+            {!user ? (
+              <Button
+                size={"lg"}
+                colorScheme="blue"
+                onClick={() => window.open("/api/auth/login", "_self")}
+              >
+                Login
+              </Button>
+            ) : (
+              <>
+                <Input
+                  placeholder="address"
+                  width="500px"
+                  isInvalid={address.length > 0 && !isValidAddress}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+                {timeout > Date.now() ? (
+                  <>
+                    <Text>You can receive tokens again after: </Text>
+                    <Countdown
+                      onComplete={() => setTimeout(0)}
+                      date={timeout}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
 
-              {txHash ? (
-                <Text fontSize="md">Transaction hash: {txHash}</Text>
-              ) : (
-                <></>
-              )}
-              <HStack spacing={8}>
-                <Button
-                  size={"lg"}
-                  colorScheme="blue"
-                  isDisabled={
-                    address.length == 0 || !isValidAddress || timeout != 0
-                  }
-                  onClick={() => sendGetTokenRq()}
-                >
-                  Get $tUSD
-                </Button>
+                {txHash ? (
+                  <Text fontSize="md">Transaction hash: {txHash}</Text>
+                ) : (
+                  <></>
+                )}
+                <HStack spacing={8}>
+                  <Button
+                    size={"lg"}
+                    colorScheme="blue"
+                    isDisabled={
+                      address.length == 0 || !isValidAddress || timeout != 0
+                    }
+                    onClick={() => sendGetTokenRq()}
+                  >
+                    Get $tUSD
+                  </Button>
 
-                <Button
-                  size={"lg"}
-                  colorScheme="blue"
-                  onClick={() => addTokenToMetamask()}
-                >
-                  Add token to metamask
-                </Button>
+                  <Button
+                    size={"lg"}
+                    colorScheme="blue"
+                    onClick={() => addTokenToMetamask()}
+                  >
+                    Add token to metamask
+                  </Button>
 
-                <Button
-                  size={"lg"}
-                  colorScheme="blue"
-                  onClick={() => window.open("/api/auth/logout", "_self")}
-                >
-                  Logout
-                </Button>
-              </HStack>
-            </>
-          )}
-        </VStack>
-      </Center>
-    </Box>
+                  <Button
+                    size={"lg"}
+                    colorScheme="blue"
+                    onClick={() => window.open("/api/auth/logout", "_self")}
+                  >
+                    Logout
+                  </Button>
+                </HStack>
+              </>
+            )}
+          </VStack>
+        </Center>
+      </Box>
+    </>
   );
 }
