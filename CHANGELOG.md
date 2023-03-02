@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.4...faucet-v0.1.5) (2023-03-02)
+
+
+### Features
+
+* add countly ([#8](https://github.com/fluencelabs/email-faucet/issues/8)) ([49709a8](https://github.com/fluencelabs/email-faucet/commit/49709a83d6753c616456bb3b4eb701b4d21680e0))
+
 ## [0.1.4](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.3...faucet-v0.1.4) (2023-02-28)
 
 
