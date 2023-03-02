@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.5...faucet-v0.1.6) (2023-03-02)
+
+
+### Bug Fixes
+
+* add ts ignore ([#10](https://github.com/fluencelabs/email-faucet/issues/10)) ([a4835c7](https://github.com/fluencelabs/email-faucet/commit/a4835c7afa664a610f30ebea71613147d3d6aeec))
+
 ## [0.1.5](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.4...faucet-v0.1.5) (2023-03-02)
 
 
