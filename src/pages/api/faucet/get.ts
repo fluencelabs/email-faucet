@@ -6,7 +6,7 @@ import { getLastTimeByUser, setLastTimestampToUser } from "@/db";
 import { faucetAbi, FAUCET_ADDRESS, wallet } from "@/web3";
 
 const FAUCET_TIMEOUT = Number(process.env.FAUCET_TIMEOUT!);
-const FAUCET_VALUE = ethers.parseEther(process.env.FAUCET_VALUE!);
+const FAUCET_VALUE = ethers.utils.parseEther(process.env.FAUCET_VALUE!);
 
 type GetTokenRes = {
   txHash: string;
@@ -21,7 +21,7 @@ export default async function handler(
   try {
     const session = await getSession(req, res);
     const email = session!.user.email;
-    const address = req.query.address;
+    const address: string = req.query.address;
 
     const lastTimestamp = await getLastTimeByUser(email);
     const currentTimestamp = Math.floor(new Date().getTime() / 1000);
@@ -36,7 +36,7 @@ export default async function handler(
       return;
     }
 
-    if (!ethers.isAddress(address)) {
+    if (!ethers.utils.isAddress(address)) {
       res.status(404).json({
         txHash: "",
         error: "Invalid address",

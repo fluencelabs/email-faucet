@@ -17,7 +17,7 @@ export default function Home() {
   const [timeout, setTimeout] = useState<number>(0);
 
   useEffect(() => {
-    setIsValidAddress(ethers.isAddress(address));
+    setIsValidAddress(ethers.utils.isAddress(address));
   }, [address]);
 
   const sendGetTokenRq = async () => {
