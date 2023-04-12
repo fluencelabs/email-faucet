@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.6...faucet-v0.1.7) (2023-04-12)
+
+
+### Bug Fixes
+
+* downgrade ethers version ([#12](https://github.com/fluencelabs/email-faucet/issues/12)) ([b47b677](https://github.com/fluencelabs/email-faucet/commit/b47b6777a64d019f0aeed5d7086fb168b4467321))
+
 ## [0.1.6](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.5...faucet-v0.1.6) (2023-03-02)
 
 
