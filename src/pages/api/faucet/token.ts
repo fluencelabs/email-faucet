@@ -20,6 +20,6 @@ export default async function handler(
   });
 
   res.status(200).json({
-    tokenAddress: ethers.stripZerosLeft(address),
+    tokenAddress: ethers.utils.hexStripZeros(address),
   });
 }

@@ -21,7 +21,7 @@ export default async function handler(
   try {
     const session = await getSession(req, res);
     const email = session!.user.email;
-    const address: string = req.query.address;
+    const address: string = req.query.address as string;
 
     const lastTimestamp = await getLastTimeByUser(email);
     const currentTimestamp = Math.floor(new Date().getTime() / 1000);
