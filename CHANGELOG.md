@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.8...faucet-v0.1.9) (2023-04-13)
+
+
+### Features
+
+* Add flt to faucet ([#16](https://github.com/fluencelabs/email-faucet/issues/16)) ([7bf988c](https://github.com/fluencelabs/email-faucet/commit/7bf988c28c1b0c8709200826dce28bb2f4af8d72))
+
 ## [0.1.8](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.7...faucet-v0.1.8) (2023-04-12)
 
 
