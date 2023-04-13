@@ -9,7 +9,9 @@ const wallet = new ethers.Wallet(process.env.FAUCET_PRIVATE_KEY!, provider);
 
 const faucetAbi = new Interface([
   "function usdToken() view returns (address)",
+  "function fluenceToken() view returns (address)",
   "function sendUSD(address addr, uint256 value)",
+  "function sendFLT(address addr, uint256 value)",
   "function lastTransactionTimestamp(address addr) view returns (uint256)",
 ]);
 

@@ -6,20 +6,31 @@ import { getLastTimeByUser, setLastTimestampToUser } from "@/db";
 import { faucetAbi, FAUCET_ADDRESS, wallet } from "@/web3";
 
 type GetTokenRes = {
-  tokenAddress: string;
+  fltTokenAddress: string;
+  usdTokenAddress: string;
 };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetTokenRes>
 ) {
-  const address = await wallet.call({
+  const usdTokenAddress = await wallet.call({
     to: FAUCET_ADDRESS,
     data: faucetAbi.encodeFunctionData("usdToken"),
     value: 0,
   });
 
+  const fltTokenAddress = await wallet.call({
+    to: FAUCET_ADDRESS,
+    data: faucetAbi.encodeFunctionData("fluenceToken"),
+    value: 0,
+  });
+
+  console.log("usdTokenAddress", usdTokenAddress);
+  console.log("fltTokenAddress", fltTokenAddress);
+
   res.status(200).json({
-    tokenAddress: ethers.utils.hexStripZeros(address),
+    usdTokenAddress: ethers.utils.hexStripZeros(usdTokenAddress),
+    fltTokenAddress: ethers.utils.hexStripZeros(fltTokenAddress),
   });
 }
