@@ -13,7 +13,8 @@ export default function Home() {
 
   const [address, setAddress] = useState<string>("");
   const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
-  const [txHash, setTxHash] = useState<string | undefined>(undefined);
+  const [txHashUSD, setTxHashUSD] = useState<string | undefined>(undefined);
+  const [txHashFLT, setTxHashFLT] = useState<string | undefined>(undefined);
   const [timeout, setTimeout] = useState<number>(0);
 
   useEffect(() => {
@@ -33,11 +34,12 @@ export default function Home() {
       return;
     }
 
-    setTxHash(data.txHash);
+    setTxHashUSD(data.txHashUSD);
+    setTxHashFLT(data.txHashFLT);
     setTimeout(data.timeout * 1000);
   };
 
-  const addTokenToMetamask = async () => {
+  const addUSDTokenToMetamask = async () => {
     if (typeof (window as any).ethereum === "undefined") {
       console.log("MetaMask is installed!");
     }
@@ -53,8 +55,32 @@ export default function Home() {
       params: {
         type: "ERC20",
         options: {
-          address: data.tokenAddress,
-          symbol: "tUSD",
+          address: data.usdTokenAddress,
+          symbol: "tUSDC",
+          decimals: 18,
+        },
+      },
+    });
+  };
+
+  const addFLTTokenToMetamask = async () => {
+    if (typeof (window as any).ethereum === "undefined") {
+      console.log("MetaMask is installed!");
+    }
+
+    const response = await fetch(`/api/faucet/token`, {
+      method: "POST",
+    });
+
+    const data = await response.json();
+    const ethereum = (window as any).ethereum;
+    await ethereum.request({
+      method: "wallet_watchAsset",
+      params: {
+        type: "ERC20",
+        options: {
+          address: data.fltTokenAddress,
+          symbol: "tFLT",
           decimals: 18,
         },
       },
@@ -100,8 +126,11 @@ export default function Home() {
                 ) : (
                   <></>
                 )}
-                {txHash ? (
-                  <Text fontSize="md">Transaction hash: {txHash}</Text>
+                {txHashUSD && txHashFLT ? (
+                  <HStack spacing={8}>
+                    <Text fontSize="md">USD transaction hash: {txHashUSD}</Text>
+                    <Text fontSize="md">FLT transaction hash: {txHashFLT}</Text>
+                  </HStack>
                 ) : (
                   <></>
                 )}
@@ -114,15 +143,22 @@ export default function Home() {
                     }
                     onClick={() => sendGetTokenRq()}
                   >
-                    Get $tUSD
+                    Get tUSDC & tFLT
                   </Button>
 
                   <Button
                     size={"lg"}
                     colorScheme="blue"
-                    onClick={() => addTokenToMetamask()}
+                    onClick={() => addUSDTokenToMetamask()}
                   >
-                    Add token to metamask
+                    Add tUSDC to metamask
+                  </Button>
+                  <Button
+                    size={"lg"}
+                    colorScheme="blue"
+                    onClick={() => addFLTTokenToMetamask()}
+                  >
+                    Add tFLT to metamask
                   </Button>
 
                   <Button

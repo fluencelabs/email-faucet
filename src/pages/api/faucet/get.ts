@@ -9,7 +9,8 @@ const FAUCET_TIMEOUT = Number(process.env.FAUCET_TIMEOUT!);
 const FAUCET_VALUE = ethers.utils.parseEther(process.env.FAUCET_VALUE!);
 
 type GetTokenRes = {
-  txHash: string;
+  txHashUSD: string;
+  txHashFLT: string;
   error: string;
   timeout: number;
 };
@@ -29,7 +30,8 @@ export default async function handler(
     if (lastTimestamp + FAUCET_TIMEOUT > currentTimestamp) {
       const left = lastTimestamp + FAUCET_TIMEOUT - currentTimestamp;
       res.status(403).json({
-        txHash: "",
+        txHashUSD: "",
+        txHashFLT: "",
         error: `Wait for timeout (${left} seconds)`,
         timeout: lastTimestamp + FAUCET_TIMEOUT,
       });
@@ -38,29 +40,42 @@ export default async function handler(
 
     if (!ethers.utils.isAddress(address)) {
       res.status(404).json({
-        txHash: "",
+        txHashUSD: "",
+        txHashFLT: "",
         error: "Invalid address",
         timeout: 0,
       });
       return;
     }
 
-    const createReceipt = await wallet.sendTransaction({
+    const count = await wallet.getTransactionCount();
+
+    const createReceiptUSD = await wallet.sendTransaction({
       to: FAUCET_ADDRESS,
       data: faucetAbi.encodeFunctionData("sendUSD", [address, FAUCET_VALUE]),
+      nonce: count,
+      value: 0,
+    });
+
+    const createReceiptFLT = await wallet.sendTransaction({
+      to: FAUCET_ADDRESS,
+      data: faucetAbi.encodeFunctionData("sendFLT", [address, FAUCET_VALUE]),
+      nonce: count + 1,
       value: 0,
     });
 
     await setLastTimestampToUser(email, currentTimestamp);
     res.status(200).json({
-      txHash: createReceipt.hash,
+      txHashUSD: createReceiptUSD.hash,
+      txHashFLT: createReceiptFLT.hash,
       error: "",
       timeout: currentTimestamp + FAUCET_TIMEOUT,
     });
   } catch (error) {
     console.log(error);
     res.status(500).end({
-      txHash: "",
+      txHashUSD: "",
+      txHashFLT: "",
       error: "Internal server error",
     });
   }
