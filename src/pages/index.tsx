@@ -82,7 +82,6 @@ function Faucet() {
           <option value="kras">Kras</option>
           <option value="stage">Stage</option>
           <option value="testnet">Testnet</option>
-          <option value="local">Local</option>
         </Select>
       </VStack>
       <Input
