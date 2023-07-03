@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.9...faucet-v0.1.10) (2023-06-28)
+
+
+### Features
+
+* add networks (kras, stage, testnet) ([#18](https://github.com/fluencelabs/email-faucet/issues/18)) ([5285196](https://github.com/fluencelabs/email-faucet/commit/52851961d9cde0aca01fbd35d97062431c065a1b))
+
 ## [0.1.9](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.8...faucet-v0.1.9) (2023-04-13)
 
 
