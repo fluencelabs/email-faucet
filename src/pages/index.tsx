@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Countdown from "react-countdown";
 import Head from "next/head";
-import { AddTokensToWallet, Login } from "./components";
-import { AuthContainer } from "./components";
+import { Login } from "./components/login";
+import { AddTokensToWallet } from "./components/addTokensToWallet";
+import { AuthContainer } from "./components/authContainer";
 import { ChainNetwork } from "@fluencelabs/deal-aurora/dist/client/config";
 
 export default function Home() {
