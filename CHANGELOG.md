@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.13](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.12...faucet-v0.1.13) (2023-08-16)
+
+
+### Bug Fixes
+
+* Fix faucet ([#25](https://github.com/fluencelabs/email-faucet/issues/25)) ([1d18324](https://github.com/fluencelabs/email-faucet/commit/1d18324fc821ccd4ba7c7ee015fc705cf3134666))
+* fix faucet bugs ([#24](https://github.com/fluencelabs/email-faucet/issues/24)) ([4023676](https://github.com/fluencelabs/email-faucet/commit/402367675aab4ae0a603e74e5e2893c9fe6fc364))
+
 ## [0.1.12](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.11...faucet-v0.1.12) (2023-08-16)
 
 
