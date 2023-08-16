@@ -1,4 +1,4 @@
-import { ChainNetwork } from "@fluencelabs/deal-aurora/dist/client/config";
+import { ContractsENV } from "@fluencelabs/deal-aurora/dist/client/config";
 import { Level } from "level";
 import path from "path";
 
@@ -9,7 +9,7 @@ const db = new Level<string, number>(
 
 async function setLastTimestampToUser(
   email: string,
-  network: ChainNetwork,
+  network: ContractsENV,
   timestamp: number
 ) {
   await db.put(`${email}-${network}}`, timestamp);
@@ -17,7 +17,7 @@ async function setLastTimestampToUser(
 
 async function getLastTimeByUser(
   email: string,
-  network: ChainNetwork
+  network: ContractsENV
 ): Promise<number> {
   try {
     return Number(await db.get(`${email}-${network}}`));

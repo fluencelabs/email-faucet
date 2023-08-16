@@ -1,14 +1,21 @@
 import { Button } from "@chakra-ui/button";
-import {
-  ChainNetwork,
-  DEAL_CONFIG,
-} from "@fluencelabs/deal-aurora/dist/client/config";
+import { ethers } from "ethers";
+import { faucetAbi } from "../../web3";
 
-export default function AddTokensToWallet(props: { network: ChainNetwork }) {
+const FAUCET_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_ADDRESS!;
+const FAUCET_CHAIN_RPC_URL = process.env.NEXT_PUBLIC_FAUCET_CHAIN_RPC_URL;
+
+const provider = new ethers.JsonRpcProvider(FAUCET_CHAIN_RPC_URL);
+export default function AddTokensToWallet() {
   const addUSDToken = async () => {
     if (typeof (window as any).ethereum === "undefined") {
       console.log("MetaMask is installed!");
     }
+
+    const usdAddress = await provider.call({
+      to: FAUCET_ADDRESS,
+      data: faucetAbi.encodeFunctionData("usdToken"),
+    });
 
     const ethereum = (window as any).ethereum;
     await ethereum.request({
@@ -16,8 +23,8 @@ export default function AddTokensToWallet(props: { network: ChainNetwork }) {
       params: {
         type: "ERC20",
         options: {
-          address: DEAL_CONFIG[props.network].testUSDToken,
-          symbol: `${props.network}USD`,
+          address: "0x" + usdAddress.substring(26),
+          symbol: `tUSD`,
           decimals: 18,
         },
       },
@@ -30,13 +37,19 @@ export default function AddTokensToWallet(props: { network: ChainNetwork }) {
     }
 
     const ethereum = (window as any).ethereum;
+
+    const fltAddress = await provider.call({
+      to: FAUCET_ADDRESS,
+      data: faucetAbi.encodeFunctionData("fluenceToken"),
+    });
+
     await ethereum.request({
       method: "wallet_watchAsset",
       params: {
         type: "ERC20",
         options: {
-          address: DEAL_CONFIG[props.network].fltToken,
-          symbol: `${props.network}FLT`,
+          address: "0x" + fltAddress.substring(26),
+          symbol: `tFLT`,
           decimals: 18,
         },
       },
