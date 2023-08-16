@@ -3,15 +3,13 @@ import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@auth0/nextjs-auth0";
 import { getLastTimeByUser, setLastTimestampToUser } from "@/db";
-import { faucetAbi, wallet } from "@/web3";
-import {
-  ChainNetwork,
-  DEAL_CONFIG,
-} from "@fluencelabs/deal-aurora/dist/client/config";
+import { faucetAbi } from "@/web3";
+import { wallet } from "@/wallet";
 
 const FAUCET_TIMEOUT = Number(process.env.FAUCET_TIMEOUT!);
 const FAUCET_USD_VALUE = ethers.parseEther(process.env.FAUCET_USD_VALUE!);
 const FAUCET_FLT_VALUE = ethers.parseEther(process.env.FAUCET_FLT_VALUE!);
+const FAUCET_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_ADDRESS!;
 
 type GetTokenRes = {
   txHash: string;
@@ -27,9 +25,8 @@ export default async function handler(
     const session = await getSession(req, res);
     const email = session!.user.email;
     const address: string = req.query.address as string;
-    const network: ChainNetwork = req.query.network as ChainNetwork;
 
-    const lastTimestamp = await getLastTimeByUser(email, network);
+    const lastTimestamp = await getLastTimeByUser(email, "testnet");
     const currentTimestamp = Math.floor(new Date().getTime() / 1000);
 
     if (lastTimestamp + FAUCET_TIMEOUT > currentTimestamp) {
@@ -52,7 +49,7 @@ export default async function handler(
     }
 
     const tx = await wallet.sendTransaction({
-      to: DEAL_CONFIG[network].faucet,
+      to: FAUCET_ADDRESS,
       data: faucetAbi.encodeFunctionData("multicall", [
         [
           faucetAbi.encodeFunctionData("sendUSD", [address, FAUCET_USD_VALUE]),
@@ -61,7 +58,7 @@ export default async function handler(
       ]),
     });
 
-    await setLastTimestampToUser(email, network, currentTimestamp);
+    await setLastTimestampToUser(email, "testnet", currentTimestamp);
     res.status(200).json({
       txHash: tx.hash,
       error: "",

@@ -9,7 +9,6 @@ import Head from "next/head";
 import { Login } from "./components/login";
 import { AddTokensToWallet } from "./components/addTokensToWallet";
 import { AuthContainer } from "./components/authContainer";
-import { ChainNetwork } from "@fluencelabs/deal-aurora/dist/client/config";
 
 export default function Home() {
   return (
@@ -33,14 +32,9 @@ export default function Home() {
 
 function Faucet() {
   const [address, setAddress] = useState<string>("");
-  const [network, setNetwork] = useState<ChainNetwork>("kras");
   const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
-  const [timeout, setTimeout] = useState<Record<ChainNetwork, number>>({
-    kras: 0,
-    stage: 0,
-    testnet: 0,
-    local: 0,
-  });
+  const [timeout, setTimeout] = useState<number>(0);
+
   const [txHash, setTxHash] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -48,20 +42,13 @@ function Faucet() {
   }, [address]);
 
   const sendGetTokenRq = async () => {
-    const response = await fetch(
-      `/api/faucet/get?address=${address}&network=${network}`,
-      {
-        method: "POST",
-      }
-    );
+    const response = await fetch(`/api/faucet/get?address=${address}`, {
+      method: "POST",
+    });
     const data = await response.json();
     console.log(data);
 
-    const newTimeout: Record<string, number> = {
-      ...timeout,
-    };
-    newTimeout[network] = data.timeout * 1000;
-    setTimeout(newTimeout);
+    setTimeout(data.timeout * 1000);
 
     if (response.status != 200) {
       alert(data.error);
@@ -73,36 +60,20 @@ function Faucet() {
 
   return (
     <>
-      <VStack position={"absolute"} top={"50px"} width={"100%"}>
-        <Text fontSize="md">Select network:</Text>
-        <Select
-          width={"20%"}
-          onChange={(e) => setNetwork(e.target.value as ChainNetwork)}
-          defaultValue={network}
-        >
-          <option value="kras">Kras</option>
-          <option value="stage">Stage</option>
-          <option value="testnet">Testnet</option>
-        </Select>
-      </VStack>
       <Input
         placeholder="address"
         width="500px"
         isInvalid={address.length > 0 && !isValidAddress}
         onChange={(e) => setAddress(e.target.value)}
       />
-      {timeout![network] > Date.now() ? (
+      {timeout > Date.now() ? (
         <>
           <Text>You can receive tokens again after: </Text>
           <Countdown
             onComplete={() => {
-              const newTimeout: Record<string, number> = {
-                ...timeout,
-              };
-              newTimeout[network] = 0;
-              setTimeout(newTimeout);
+              setTimeout(0);
             }}
-            date={timeout[network]}
+            date={timeout}
           />
         </>
       ) : (
@@ -112,15 +83,13 @@ function Faucet() {
         <Button
           size={"lg"}
           colorScheme="blue"
-          isDisabled={
-            address.length == 0 || !isValidAddress || timeout[network] != 0
-          }
+          isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
           onClick={() => sendGetTokenRq()}
         >
           Get testnet USD & tFLT
         </Button>
 
-        <AddTokensToWallet network={network} />
+        <AddTokensToWallet />
 
         <Button
           size={"lg"}
