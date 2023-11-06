@@ -1,23 +1,45 @@
 import { Button } from "@chakra-ui/button";
 import { ethers } from "ethers";
 import { faucetAbi } from "../../web3";
+import {sendGetArtifactsRq} from "@/pages/components/backendApi";
 
-const FAUCET_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_ADDRESS!;
-const FAUCET_CHAIN_RPC_URL = process.env.NEXT_PUBLIC_FAUCET_CHAIN_RPC_URL;
 
-const provider = new ethers.JsonRpcProvider(FAUCET_CHAIN_RPC_URL);
-export default function AddTokensToWallet() {
-  const addUSDToken = async () => {
-    if (typeof (window as any).ethereum === "undefined") {
+// Did some metamask related and backend related checks.
+//  Returns ethers.JsonRpcProvider, window.ethereum (metamask).
+async function _returnProvidersAndArtifacts() {
+  if (typeof (window as any).ethereum === "undefined") {
       console.log("MetaMask is installed!");
     }
+    const ethereum = (window as any).ethereum;
+    const artifacts = await sendGetArtifactsRq()
+
+    if (!artifacts) {
+      const _msg = "No info about contract artifacts from the backend!"
+      alert(_msg)
+      throw Error(_msg)
+    }
+    const connectedNetwork = ethereum.networkVersion
+    const faucetNetwork = artifacts.chainId.toString()
+    if (faucetNetwork !== connectedNetwork) {
+      const _msg = "Your metamask connected to the network ID: " + connectedNetwork + "Faucet use " + faucetNetwork + " instead."
+      alert(_msg)
+      throw Error(_msg)
+    }
+    const contractAddress = artifacts.contractAddress
+
+    const provider = new ethers.BrowserProvider(ethereum);
+    return {provider, ethereum, contractAddress}
+}
+
+export default function AddTokensToWallet() {
+  const addUSDToken = async () => {
+    const {provider, ethereum, contractAddress} = await _returnProvidersAndArtifacts();
 
     const usdAddress = await provider.call({
-      to: FAUCET_ADDRESS,
+      to: contractAddress,
       data: faucetAbi.encodeFunctionData("usdToken"),
     });
 
-    const ethereum = (window as any).ethereum;
     await ethereum.request({
       method: "wallet_watchAsset",
       params: {
@@ -32,14 +54,10 @@ export default function AddTokensToWallet() {
   };
 
   const addFLTToken = async () => {
-    if (typeof (window as any).ethereum === "undefined") {
-      console.log("MetaMask is installed!");
-    }
-
-    const ethereum = (window as any).ethereum;
+    const {provider, ethereum, contractAddress} = await _returnProvidersAndArtifacts();
 
     const fltAddress = await provider.call({
-      to: FAUCET_ADDRESS,
+      to: contractAddress,
       data: faucetAbi.encodeFunctionData("fluenceToken"),
     });
 
