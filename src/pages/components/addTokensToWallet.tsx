@@ -1,4 +1,5 @@
 import { Button } from "@chakra-ui/button";
+import { Tooltip } from '@chakra-ui/react'
 import { ethers } from "ethers";
 import { faucetAbi } from "../../web3";
 import {sendGetArtifactsRq} from "@/pages/components/backendApi";
@@ -76,12 +77,16 @@ export default function AddTokensToWallet() {
 
   return (
     <>
-      <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()}>
-        Add test USD to metamask
-      </Button>
-      <Button size={"lg"} colorScheme="blue" onClick={() => addFLTToken()}>
-        Add test FLT to metamask
-      </Button>
+      <Tooltip hasArrow label='Populate your Metamask with token name.'>
+        <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()} >
+          Import USD to Metamask
+        </Button>
+      </Tooltip>
+      <Tooltip hasArrow label='Populate your Metamask with token name.'>
+        <Button size={"lg"} colorScheme="blue" onClick={() => addFLTToken()}>
+          Import FLT to Metamask
+        </Button>
+      </Tooltip>
     </>
   );
 }
