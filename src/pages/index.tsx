@@ -41,8 +41,8 @@ function Faucet() {
     setIsValidAddress(ethers.isAddress(address));
   }, [address]);
 
-  const sendGetTokenRq = async () => {
-    const response = await fetch(`/api/faucet/get?address=${address}`, {
+  const sendPostTokenRq = async () => {
+    const response = await fetch(`/api/faucet/tokens?address=${address}`, {
       method: "POST",
     });
     const data = await response.json();
@@ -84,7 +84,7 @@ function Faucet() {
           size={"lg"}
           colorScheme="blue"
           isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
-          onClick={() => sendGetTokenRq()}
+          onClick={() => sendPostTokenRq()}
         >
           Get testnet USD & tFLT
         </Button>
