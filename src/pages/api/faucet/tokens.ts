@@ -11,7 +11,7 @@ const FAUCET_USD_VALUE = ethers.parseEther(process.env.FAUCET_USD_VALUE!);
 const FAUCET_FLT_VALUE = ethers.parseEther(process.env.FAUCET_FLT_VALUE!);
 const FAUCET_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_ADDRESS!;
 
-type GetTokenRes = {
+type PostTokens = {
   txHash: string;
   error: string;
   timeout: number;
@@ -19,7 +19,7 @@ type GetTokenRes = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetTokenRes>
+  res: NextApiResponse<PostTokens>
 ) {
   try {
     const session = await getSession(req, res);

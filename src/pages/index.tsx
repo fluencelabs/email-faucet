@@ -1,5 +1,6 @@
 import { Box, Center, HStack, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
+import { Tooltip } from '@chakra-ui/react'
 import { Heading, Input, Select } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -14,13 +15,13 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Fluence Testnet Faucet</title>
+        <title>Fluence Faucet</title>
       </Head>
       <Box textAlign="center" fontSize="xl">
         <Center h="100vh">
           <VStack spacing={8}>
             <Heading as="h1" size="2xl">
-              Fluence Testnet Faucet
+              Fluence Faucet
             </Heading>
             <AuthContainer beforeLogin={<Login />} afterLogin={<Faucet />} />
           </VStack>
@@ -41,8 +42,8 @@ function Faucet() {
     setIsValidAddress(ethers.isAddress(address));
   }, [address]);
 
-  const sendGetTokenRq = async () => {
-    const response = await fetch(`/api/faucet/get?address=${address}`, {
+  const sendPostTokenRq = async () => {
+    const response = await fetch(`/api/faucet/tokens?address=${address}`, {
       method: "POST",
     });
     const data = await response.json();
@@ -80,14 +81,16 @@ function Faucet() {
         <></>
       )}
       <HStack spacing={8}>
-        <Button
-          size={"lg"}
-          colorScheme="blue"
-          isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
-          onClick={() => sendGetTokenRq()}
-        >
-          Get testnet USD & tFLT
-        </Button>
+        <Tooltip hasArrow label='Request Faucet to send both tokens: USD and FLT to your account on the supported chain.'>
+          <Button
+            size={"lg"}
+            colorScheme="blue"
+            isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
+            onClick={() => sendPostTokenRq()}
+          >
+            Receive USD & FLT
+          </Button>
+        </Tooltip>
 
         <AddTokensToWallet />
 
