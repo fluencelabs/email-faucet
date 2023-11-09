@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   test:
+    name: "Build faucet"
     runs-on: ubuntu-latest
 
     steps:
