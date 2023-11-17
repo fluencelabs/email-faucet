@@ -1,6 +1,6 @@
 import { Box, Center, HStack, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
-import { Tooltip } from '@chakra-ui/react'
+import { Tooltip } from "@chakra-ui/react";
 import { Heading, Input, Select } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import Head from "next/head";
 import { Login } from "./components/login";
 import { AddTokensToWallet } from "./components/addTokensToWallet";
 import { AuthContainer } from "./components/authContainer";
-import {sendPostTokenRq} from "@/backendApi";
+import { sendPostTokenRq } from "@/backendApi";
 
 export default function Home() {
   return (
@@ -44,7 +44,10 @@ function Faucet() {
   }, [address]);
 
   const sendPostTokenRqButton = async () => {
-    const data = sendPostTokenRq(address)
+    const data = await sendPostTokenRq(address);
+
+    console.log(data);
+    console.log(Math.floor(new Date().getTime() / 1000));
     // @ts-ignore
     setTimeout(data.timeout * 1000);
     // @ts-ignore
@@ -59,7 +62,7 @@ function Faucet() {
         isInvalid={address.length > 0 && !isValidAddress}
         onChange={(e) => setAddress(e.target.value)}
       />
-      {timeout > Date.now() ? (
+      {timeout > Math.floor(new Date().getTime() / 1000) ? (
         <>
           <Text>You can receive tokens again after: </Text>
           <Countdown
@@ -73,7 +76,10 @@ function Faucet() {
         <></>
       )}
       <HStack spacing={8}>
-        <Tooltip hasArrow label='Request Faucet to send both tokens: USD and FLT to your account on the supported chain.'>
+        <Tooltip
+          hasArrow
+          label="Request Faucet to send both tokens: USD and FLT to your account on the supported chain."
+        >
           <Button
             size={"lg"}
             colorScheme="blue"
