@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.2.0...faucet-v0.2.1) (2023-11-17)
+
+
+### Bug Fixes
+
+* fix timer ([#31](https://github.com/fluencelabs/email-faucet/issues/31)) ([2dfa8c8](https://github.com/fluencelabs/email-faucet/commit/2dfa8c85bf13039316d46064519fcd4a9a3d7211))
+
 ## [0.2.0](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.13...faucet-v0.2.0) (2023-11-17)
 
 
