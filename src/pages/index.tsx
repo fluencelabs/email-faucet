@@ -10,6 +10,7 @@ import Head from "next/head";
 import { Login } from "./components/login";
 import { AddTokensToWallet } from "./components/addTokensToWallet";
 import { AuthContainer } from "./components/authContainer";
+import {sendPostTokenRq} from "@/backendApi";
 
 export default function Home() {
   return (
@@ -42,20 +43,11 @@ function Faucet() {
     setIsValidAddress(ethers.isAddress(address));
   }, [address]);
 
-  const sendPostTokenRq = async () => {
-    const response = await fetch(`/api/faucet/tokens?address=${address}`, {
-      method: "POST",
-    });
-    const data = await response.json();
-    console.log(data);
-
+  const sendPostTokenRqButton = async () => {
+    const data = sendPostTokenRq(address)
+    // @ts-ignore
     setTimeout(data.timeout * 1000);
-
-    if (response.status != 200) {
-      alert(data.error);
-      return;
-    }
-
+    // @ts-ignore
     setTxHash(data.txHash);
   };
 
@@ -86,7 +78,7 @@ function Faucet() {
             size={"lg"}
             colorScheme="blue"
             isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
-            onClick={() => sendPostTokenRq()}
+            onClick={() => sendPostTokenRqButton()}
           >
             Receive USD & FLT
           </Button>

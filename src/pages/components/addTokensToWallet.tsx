@@ -2,7 +2,8 @@ import { Button } from "@chakra-ui/button";
 import { Tooltip } from '@chakra-ui/react'
 import { ethers } from "ethers";
 import { faucetAbi } from "../../web3";
-import {sendGetArtifactsRq} from "@/pages/components/backendApi";
+import {sendGetArtifactsRq} from "../../backendApi";
+import {switchChainToMumbai} from "@/metamask";
 
 
 // Did some metamask related and backend related checks.
@@ -22,9 +23,13 @@ async function _returnProvidersAndArtifacts() {
     const connectedNetwork = ethereum.networkVersion
     const faucetNetwork = artifacts.chainId.toString()
     if (faucetNetwork !== connectedNetwork) {
-      const _msg = "Your metamask connected to the network ID: " + connectedNetwork + "Faucet use " + faucetNetwork + " instead."
+      const _msg = (
+          "Your metamask connected to the network ID: " + connectedNetwork +
+          ". Faucet use " + faucetNetwork + " instead." +
+          ". Please connect your wallet to Mumbai instead."
+      )
       alert(_msg)
-      throw Error(_msg)
+      await switchChainToMumbai(ethereum)
     }
     const contractAddress = artifacts.contractAddress
 

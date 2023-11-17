@@ -1,16 +1,5 @@
 # Changelog
 
-## [0.2.0](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.13...faucet-v0.2.0) (2023-11-07)
-
-
-### ⚠ BREAKING CHANGES
-
-* add coin tag to metamask without localhost lookup [CHAIN-182] #27
-
-### Bug Fixes
-
-* add coin tag to metamask without localhost lookup [CHAIN-182] [#27](https://github.com/fluencelabs/email-faucet/issues/27) ([fc4c701](https://github.com/fluencelabs/email-faucet/commit/fc4c7014f53c18820edf82be2b2859b67d1860e9))
-
 ## [0.1.13](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.1.12...faucet-v0.1.13) (2023-08-16)
 
 
