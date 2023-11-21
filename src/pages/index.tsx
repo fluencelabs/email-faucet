@@ -86,7 +86,7 @@ function Faucet() {
             isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
             onClick={() => sendPostTokenRqButton()}
           >
-            Receive USD & FLT
+            Receive tUSD & tFLT
           </Button>
         </Tooltip>
 

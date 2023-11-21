@@ -84,12 +84,12 @@ export default function AddTokensToWallet() {
     <>
       <Tooltip hasArrow label='Populate your Metamask with token name.'>
         <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()} >
-          Import USD to Metamask
+          Import tUSD to Metamask
         </Button>
       </Tooltip>
       <Tooltip hasArrow label='Populate your Metamask with token name.'>
         <Button size={"lg"} colorScheme="blue" onClick={() => addFLTToken()}>
-          Import FLT to Metamask
+          Import tFLT to Metamask
         </Button>
       </Tooltip>
     </>
