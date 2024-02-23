@@ -86,7 +86,7 @@ function Faucet() {
       <HStack spacing={8}>
         <Tooltip
           hasArrow
-          label="Request Faucet to send both tokens: USD and FLT to your account on the supported chain."
+          label="Request Faucet to send both tokens: tUSD and tFLT to your account on the supported chain."
         >
           <Button
             size={"lg"}

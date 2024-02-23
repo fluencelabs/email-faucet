@@ -74,12 +74,12 @@ export default function AddTokensToWallet() {
     <>
       <Tooltip hasArrow label={`Add ${process.env.NEXT_PUBLIC_CHAIN_NAME} to your Metamask`}>
         <Button size={"lg"} colorScheme="blue" onClick={() => switchChain()} >
-          Add to Metamask
+          Add chain
         </Button>
       </Tooltip>
-      <Tooltip hasArrow label='Populate your Metamask with test USD token'>
+      <Tooltip hasArrow label='Populate your Metamask with test tUSD token'>
         <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()} >
-          Import USD to Metamask
+          Import tUSD to Metamask
         </Button>
       </Tooltip>
     </>
