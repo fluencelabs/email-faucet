@@ -22,13 +22,13 @@ async function _returnProvidersAndArtifacts() {
       alert(_msg)
       throw Error(_msg)
     }
-    const contractAddress = artifacts.contractAddress
+    const contractAddress = artifacts.contractAddress;
 
     const provider = new ethers.BrowserProvider(ethereum);
-    return {provider, ethereum, contractAddress}
+    return { provider, ethereum, contractAddress };
 }
 
-export default function AddTokensToWallet() {
+export default function AddTokensToWallet({ chainName }: { chainName: string }) {
   const addUSDToken = async () => {
     const {provider, ethereum, contractAddress} = await _returnProvidersAndArtifacts();
 
@@ -72,7 +72,7 @@ export default function AddTokensToWallet() {
 
   return (
     <>
-      <Tooltip hasArrow label={`Switch to ${process.env.NEXT_PUBLIC_CHAIN_NAME} in your Metamask`}>
+      <Tooltip hasArrow label={`Switch to ${chainName} in your Metamask`}>
         <Button size={"lg"} colorScheme="blue" onClick={() => switchChain()} >
           Switch chain
         </Button>

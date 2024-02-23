@@ -115,7 +115,7 @@ function Faucet() {
             </Button>
           </Tooltip>
 
-          <AddTokensToWallet />
+          <AddTokensToWallet chainName={artifacts.chainName} />
 
           <Button
             size={"lg"}
