@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.3.0](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.2.1...faucet-v0.3.0) (2024-02-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* fixes, add native flt ([#35](https://github.com/fluencelabs/email-faucet/issues/35))
+
+### Features
+
+* fixes, add native flt ([#35](https://github.com/fluencelabs/email-faucet/issues/35)) ([9da2930](https://github.com/fluencelabs/email-faucet/commit/9da2930e3e21d680a05db4220491d51459990a3d))
+
+
+### Bug Fixes
+
+* token names in frontend ([#33](https://github.com/fluencelabs/email-faucet/issues/33)) ([5f4332f](https://github.com/fluencelabs/email-faucet/commit/5f4332fdb81525462d6904617a8f4c8cce1dea87))
+* tokenNames ([5f4332f](https://github.com/fluencelabs/email-faucet/commit/5f4332fdb81525462d6904617a8f4c8cce1dea87))
+
 ## [0.2.1](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.2.0...faucet-v0.2.1) (2023-11-17)
 
 
