@@ -1,10 +1,12 @@
+import { Artifacts } from "./pages/api/faucet/artifacts";
+
 const ARTIFACTS_ENDPOINT = '/api/faucet/artifacts'
 const TOKEN_ENDPOINT = '/api/faucet/tokens'
 
 class BackendApiServerError extends Error {}
 
 // TODO: use in-frontend mapping instead.
-export const sendGetArtifactsRq = async () => {
+export const sendGetArtifactsRq = async (): Promise<Artifacts> => {
     const response = await fetch(ARTIFACTS_ENDPOINT, {
         method: "GET",
     });
