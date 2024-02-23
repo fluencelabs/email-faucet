@@ -7,7 +7,7 @@ import { faucetAbi } from "@/web3";
 import { wallet } from "@/wallet";
 
 const FAUCET_TIMEOUT = Number(process.env.FAUCET_TIMEOUT!);
-const FAUCET_USD_VALUE = ethers.parseEther(process.env.FAUCET_USD_VALUE!);
+const FAUCET_USD_VALUE = ethers.parseUnits(process.env.FAUCET_USD_VALUE!, 6); // TODO fetch or set in env
 const FAUCET_FLT_VALUE = ethers.parseEther(process.env.FAUCET_FLT_VALUE!);
 const FAUCET_ADDRESS = process.env.NEXT_PUBLIC_FAUCET_ADDRESS!;
 
