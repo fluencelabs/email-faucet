@@ -94,7 +94,7 @@ function Faucet() {
             isDisabled={address.length == 0 || !isValidAddress || timeout != 0 || receivePending}
             onClick={() => sendPostTokenRqButton()}
           >
-            Receive {process.env.NEXT_PUBLIC_NATIVE_CURRENCY} & USD
+            Receive {process.env.NEXT_PUBLIC_NATIVE_CURRENCY} & tUSD
           </Button>
         </Tooltip>
 
