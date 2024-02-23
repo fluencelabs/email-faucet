@@ -15,7 +15,7 @@ async function _returnProvidersAndArtifacts() {
     const ethereum = (window as any).ethereum;
     await switchChain();
 
-    const artifacts = await sendGetArtifactsRq()
+    const artifacts = await sendGetArtifactsRq();
 
     if (!artifacts) {
       const _msg = "No info about contract artifacts from the backend!"
@@ -40,7 +40,7 @@ export default function AddTokensToWallet() {
     const usdAddress = "0x" + usdAddressRaw.substring(26);
 
     let decimals = 6;
-    let symbol = "tUSD"; // shall be same as in token
+    let symbol = "tUSDC"; // shall be same as in token
     try {
       const decimalsRaw = await provider.call({
         to: usdAddress,
@@ -77,9 +77,9 @@ export default function AddTokensToWallet() {
           Switch chain
         </Button>
       </Tooltip>
-      <Tooltip hasArrow label='Populate your Metamask with test tUSD token'>
+      <Tooltip hasArrow label='Populate your Metamask with test tUSDC token'>
         <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()} >
-          Import tUSD to Metamask
+          Import tUSDC to Metamask
         </Button>
       </Tooltip>
     </>

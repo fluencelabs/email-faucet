@@ -1,8 +1,17 @@
+import { sendGetArtifactsRq } from "./backendApi";
+
 // Ethereum is from windows (metamask engine).
 export async function switchChain() {
     const ethereum = (window as any).ethereum;
-    console.log("Switching...")
-    const chainId = '0x' + parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? '0').toString(16);
+    console.log("Switching...");
+    const artifacts = await sendGetArtifactsRq();
+
+    if (!artifacts) {
+      const _msg = "No info about contract artifacts from the backend!"
+      alert(_msg)
+      throw Error(_msg)
+    }
+    const chainId = '0x' + parseInt(artifacts.chainId).toString(16);
     try {
       await ethereum.request({
         method: 'wallet_switchEthereumChain',
@@ -17,18 +26,18 @@ export async function switchChain() {
             params: [
               {
                 chainId,
-                chainName: process.env.NEXT_PUBLIC_CHAIN_NAME,
-                rpcUrls: [process.env.NEXT_PUBLIC_FAUCET_CHAIN_RPC_URL],
+                chainName: artifacts.chainName,
+                rpcUrls: [artifacts.rpcUrl],
                 nativeCurrency: {
-                  name: process.env.NEXT_PUBLIC_NATIVE_CURRENCY,
-                  symbol: process.env.NEXT_PUBLIC_NATIVE_CURRENCY,
+                  name: artifacts.nativeTicker,
+                  symbol: artifacts.nativeTicker,
                   decimals: 18,
                 },
               },
             ],
           });
         } catch (addError) {
-          console.log(`Error on adding ${process.env.NEXT_PUBLIC_CHAIN_NAME} chain.`);
+          console.log(`Error on adding ${artifacts.chainName} chain.`);
         }
       } else {
         // TODO: handle other "switch" errors
