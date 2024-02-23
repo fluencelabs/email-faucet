@@ -2,8 +2,8 @@ import { Button } from "@chakra-ui/button";
 import { Tooltip } from '@chakra-ui/react'
 import { ethers } from "ethers";
 import { faucetAbi } from "../../web3";
-import {sendGetArtifactsRq} from "../../backendApi";
-import {switchChainToMumbai} from "@/metamask";
+import { sendGetArtifactsRq } from "../../backendApi";
+import { switchChain } from "@/metamask";
 
 
 // Did some metamask related and backend related checks.
@@ -13,23 +13,14 @@ async function _returnProvidersAndArtifacts() {
       console.log("MetaMask is installed!");
     }
     const ethereum = (window as any).ethereum;
+    await switchChain();
+
     const artifacts = await sendGetArtifactsRq()
 
     if (!artifacts) {
       const _msg = "No info about contract artifacts from the backend!"
       alert(_msg)
       throw Error(_msg)
-    }
-    const connectedNetwork = ethereum.networkVersion
-    const faucetNetwork = artifacts.chainId.toString()
-    if (faucetNetwork !== connectedNetwork) {
-      const _msg = (
-          "Your metamask connected to the network ID: " + connectedNetwork +
-          ". Faucet use " + faucetNetwork + " instead." +
-          ". Please connect your wallet to Mumbai instead."
-      )
-      alert(_msg)
-      await switchChainToMumbai(ethereum)
     }
     const contractAddress = artifacts.contractAddress
 
@@ -41,40 +32,39 @@ export default function AddTokensToWallet() {
   const addUSDToken = async () => {
     const {provider, ethereum, contractAddress} = await _returnProvidersAndArtifacts();
 
-    const usdAddress = await provider.call({
+    const usdAddressRaw = await provider.call({
       to: contractAddress,
       data: faucetAbi.encodeFunctionData("usdToken"),
     });
 
+    const usdAddress = "0x" + usdAddressRaw.substring(26);
+
+    let decimals = 6;
+    let symbol = "tUSD"; // shall be same as in token
+    try {
+      const decimalsRaw = await provider.call({
+        to: usdAddress,
+        data: "0x313ce567", // decimals()
+      });
+      decimals = parseInt(decimalsRaw);
+
+      const symbolRaw = await provider.call({
+        to: usdAddress,
+        data: "0x95d89b41", // symbol()
+      });
+      symbol = (new ethers.AbiCoder).decode(["string"], symbolRaw).toString();
+    } catch (e: any) {
+      console.error(e);
+    }
+
     await ethereum.request({
       method: "wallet_watchAsset",
       params: {
         type: "ERC20",
         options: {
-          address: "0x" + usdAddress.substring(26),
-          symbol: `tUSD`,
-          decimals: 18,
-        },
-      },
-    });
-  };
-
-  const addFLTToken = async () => {
-    const {provider, ethereum, contractAddress} = await _returnProvidersAndArtifacts();
-
-    const fltAddress = await provider.call({
-      to: contractAddress,
-      data: faucetAbi.encodeFunctionData("fluenceToken"),
-    });
-
-    await ethereum.request({
-      method: "wallet_watchAsset",
-      params: {
-        type: "ERC20",
-        options: {
-          address: "0x" + fltAddress.substring(26),
-          symbol: `tFLT`,
-          decimals: 18,
+          address: usdAddress,
+          symbol,
+          decimals,
         },
       },
     });
@@ -82,14 +72,14 @@ export default function AddTokensToWallet() {
 
   return (
     <>
-      <Tooltip hasArrow label='Populate your Metamask with token name.'>
-        <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()} >
-          Import USD to Metamask
+      <Tooltip hasArrow label={`Add ${process.env.NEXT_PUBLIC_CHAIN_NAME} to your Metamask`}>
+        <Button size={"lg"} colorScheme="blue" onClick={() => switchChain()} >
+          Add to Metamask
         </Button>
       </Tooltip>
-      <Tooltip hasArrow label='Populate your Metamask with token name.'>
-        <Button size={"lg"} colorScheme="blue" onClick={() => addFLTToken()}>
-          Import FLT to Metamask
+      <Tooltip hasArrow label='Populate your Metamask with test USD token'>
+        <Button size={"lg"} colorScheme="blue" onClick={() => addUSDToken()} >
+          Import USD to Metamask
         </Button>
       </Tooltip>
     </>

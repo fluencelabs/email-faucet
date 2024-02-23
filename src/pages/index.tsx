@@ -39,19 +39,27 @@ function Faucet() {
 
   const [txHash, setTxHash] = useState<string | undefined>(undefined);
 
+  const [receivePending, setReceivePending] = useState(false);
+
   useEffect(() => {
     setIsValidAddress(ethers.isAddress(address));
   }, [address]);
 
   const sendPostTokenRqButton = async () => {
-    const data = await sendPostTokenRq(address);
+    setReceivePending(true);
+    try {
+      const data = await sendPostTokenRq(address);
 
-    console.log(data);
-    console.log(Math.floor(new Date().getTime() / 1000));
-    // @ts-ignore
-    setTimeout(data.timeout * 1000);
-    // @ts-ignore
-    setTxHash(data.txHash);
+      console.log(data);
+      console.log(Math.floor(new Date().getTime() / 1000));
+      // @ts-ignore
+      setTimeout(data.timeout * 1000);
+      // @ts-ignore
+      setTxHash(data.txHash);
+
+    } finally {
+      setReceivePending(false);
+    }
   };
 
   return (
@@ -83,10 +91,10 @@ function Faucet() {
           <Button
             size={"lg"}
             colorScheme="blue"
-            isDisabled={address.length == 0 || !isValidAddress || timeout != 0}
+            isDisabled={address.length == 0 || !isValidAddress || timeout != 0 || receivePending}
             onClick={() => sendPostTokenRqButton()}
           >
-            Receive USD & FLT
+            Receive {process.env.NEXT_PUBLIC_NATIVE_CURRENCY} & USD
           </Button>
         </Tooltip>
 
