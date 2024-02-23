@@ -58,3 +58,18 @@ jobs:
           tags: docker.fluence.dev/faucet:${{ steps.version.outputs.id }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Print image names to check summary
+        run: |
+          cat <<'SNAPSHOT' >> $GITHUB_STEP_SUMMARY
+          ## faucet
+          ```
+          docker.fluence.dev/faucet:${{ steps.version.outputs.id }}
+          ```
+
+          ## Access to Fluence docker registry
+          ```
+          vault read kv/basicauth/dev
+          docker login docker.fluence.dev
+          ```
+          SNAPSHOT
