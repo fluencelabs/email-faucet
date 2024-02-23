@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    name: "Build faucet snapshot"
+    name: "Build faucet"
     runs-on: ubuntu-latest
 
     permissions:
