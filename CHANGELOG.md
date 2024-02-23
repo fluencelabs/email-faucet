@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.3.0...faucet-v0.3.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* decimals fix ([#36](https://github.com/fluencelabs/email-faucet/issues/36)) ([0d8d4be](https://github.com/fluencelabs/email-faucet/commit/0d8d4be0b9d8e3b1579b61fb5502572ba520267a))
+
 ## [0.3.0](https://github.com/fluencelabs/email-faucet/compare/faucet-v0.2.1...faucet-v0.3.0) (2024-02-23)
 
 
