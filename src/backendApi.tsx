@@ -13,7 +13,7 @@ export const sendGetArtifactsRq = async (): Promise<Artifacts> => {
     const data = await response.json();
     console.log("Requested " + ARTIFACTS_ENDPOINT + ". Got:", data);
     if (response.status != 200) {
-        throw BackendApiServerError
+        throw new BackendApiServerError(`Error ${response.status}: ${data.error}`);
     }
 
     return data;
@@ -21,12 +21,17 @@ export const sendGetArtifactsRq = async (): Promise<Artifacts> => {
 
 export const sendPostTokenRq = async (address: string) => {
     const response = await fetch(TOKEN_ENDPOINT + `?address=${address}`, {method: "POST"});
-    const data = await response.json();
+    let data: Record<string, any>;
+    try {
+      data = await response.json();
+    } catch (e: any) {
+        console.error(e);
+        throw new BackendApiServerError("Failed to parse api response");
+    }
     console.log("Requested " + TOKEN_ENDPOINT + ". Got: ", data);
 
     if (response.status != 200) {
-        alert(data.error);
-        throw BackendApiServerError
+        throw new BackendApiServerError(data.error);
     }
 
     return data;

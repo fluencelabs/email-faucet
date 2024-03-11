@@ -4,7 +4,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@auth0/nextjs-auth0";
 import { getLastTimeByUser, setLastTimestampToUser } from "@/db";
 import { faucetAbi } from "@/web3";
-import { wallet } from "@/wallet";
+import { BALANCE_OF_SELECTOR, provider, wallet } from "@/wallet";
+import { INSUFFICIENT_FLT_ERROR, INSUFFICIENT_USD_ERROR } from "@/common";
 
 const FAUCET_TIMEOUT = Number(process.env.FAUCET_TIMEOUT!);
 const FAUCET_USD_VALUE = ethers.parseUnits(process.env.FAUCET_USD_VALUE!, 6); // TODO fetch or set in env
@@ -16,6 +17,21 @@ type PostTokens = {
   error: string;
   timeout: number;
 };
+
+let usdTokenAddress = '';
+const getUsdTokenAddress = async (): Promise<string> => {
+  if (!usdTokenAddress) {
+    const usdToken = await wallet.call({
+      to: FAUCET_ADDRESS,
+      data: faucetAbi.encodeFunctionData("usdToken", []),
+    });
+    if (usdToken === "0x") {
+      throw new Error("Failed to get tUSDC token address");
+    }
+    usdTokenAddress = (new ethers.AbiCoder).decode(["address"], usdToken)[0];
+  }
+  return usdTokenAddress;
+}
 
 export default async function handler(
   req: NextApiRequest,
@@ -43,6 +59,30 @@ export default async function handler(
       res.status(404).json({
         txHash: "",
         error: "Invalid address",
+        timeout: 0,
+      });
+      return;
+    }
+
+    const balance = await provider.getBalance(address);
+    const usdBalance = await wallet.call({
+      to: await getUsdTokenAddress(),
+      data: BALANCE_OF_SELECTOR + (new ethers.AbiCoder).encode(["address"], [address]).slice(2),
+    });
+
+    if (BigInt(usdBalance) < FAUCET_USD_VALUE) {
+      res.status(403).json({
+        txHash: "",
+        error: INSUFFICIENT_USD_ERROR,
+        timeout: 0,
+      });
+      return;
+    }
+
+    if (balance < FAUCET_FLT_VALUE) {
+      res.status(403).json({
+        txHash: "",
+        error: INSUFFICIENT_FLT_ERROR,
         timeout: 0,
       });
       return;

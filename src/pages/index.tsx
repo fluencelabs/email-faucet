@@ -3,7 +3,7 @@ import { Button } from "@chakra-ui/button";
 import { Spinner, Tooltip } from "@chakra-ui/react";
 import { Heading, Input, Select } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Countdown from "react-countdown";
 import Head from "next/head";
@@ -12,6 +12,7 @@ import { AddTokensToWallet } from "./components/addTokensToWallet";
 import { AuthContainer } from "./components/authContainer";
 import { sendGetArtifactsRq, sendPostTokenRq } from "@/backendApi";
 import { Artifacts } from "./api/faucet/artifacts";
+import { INSUFFICIENT_FLT_ERROR, INSUFFICIENT_USD_ERROR } from "@/common";
 
 export default function Home() {
   return (
@@ -43,6 +44,8 @@ function Faucet() {
   const [receivePending, setReceivePending] = useState(false);
   const [artifacts, setArtifacts] = useState<Artifacts | null>(null);
 
+  const [error, setError] = useState<ReactNode>(<></>);
+
   useEffect(() => {
     sendGetArtifactsRq().then((_artifacts) => {
       setArtifacts(_artifacts);
@@ -51,9 +54,11 @@ function Faucet() {
 
   useEffect(() => {
     setIsValidAddress(ethers.isAddress(address));
+    setError('');
   }, [address]);
 
   const sendPostTokenRqButton = async () => {
+    setError('');
     setReceivePending(true);
     try {
       const data = await sendPostTokenRq(address);
@@ -65,6 +70,17 @@ function Faucet() {
       // @ts-ignore
       setTxHash(data.txHash);
 
+    } catch (e: any) {
+      if (e.message === INSUFFICIENT_FLT_ERROR || e.message === INSUFFICIENT_USD_ERROR) {
+        setError(<>
+          Sorry! Faucet has insufficient {e.message === INSUFFICIENT_FLT_ERROR ? 'tFLT' : 'tUSDC'} balance.
+          Please contact administrators via <a style={{ color: 'blue' }} href="https://fluence.chat" target="_blank">
+            fluence.chat
+          </a>
+        </>);
+      } else {
+        setError(e.message);
+      }
     } finally {
       setReceivePending(false);
     }
@@ -127,6 +143,9 @@ function Faucet() {
         </HStack>
 
         {txHash ? <Text fontSize="md">Transaction hash: {txHash}</Text> : <></>}
+        {error && <Text fontSize="md" color="red">
+          {error}
+        </Text>}
       </>}
     </>
   );
